@@ -65,7 +65,7 @@ if __name__ == '__main__':
         if args.prepare_embed or not embedding_ready:
             print("Preparing Embedding for {} ...".format(args.ds_name))
             root_prefix = "" if args.data_path == "data" else "../"
-            audio_embedding_prepare(model_name=args.model_name, data_rootpath=dataset, root_prefix=root_prefix, remark=save_remark)
+            audio_embedding_prepare(model_name=args.model_name, data_rootpath=dataset, root_prefix=root_prefix, remark=save_remark, args=args)
             # combine_normwear_ast(data_rootpath=dataset, root_prefix=root_prefix)
 
             # fetch all file names

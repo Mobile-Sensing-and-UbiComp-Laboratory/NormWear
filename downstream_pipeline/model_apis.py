@@ -279,7 +279,7 @@ def spec_cwt(audio_data): # [nvar, L]
     return all_specs
 
 class NormWear_API(nn.Module):
-    def __init__(self):
+    def __init__(self, weight_path="data/results/job_rand_maskv3_checkpoint-15470-correct.pth"):
         super().__init__()
         self.backbone = NormWear(img_size=(387,65), patch_size=(9,5),mask_scheme='random',mask_prob=0.8,use_cwt=True,nvar=4, comb_freq=False)
 
@@ -288,19 +288,19 @@ class NormWear_API(nn.Module):
         # '../data/results/NormWear_Huge_job_resume_checkpoint-1-correct.pth' # 2.5m
         # ../data/results/NormWear_Huge_job_checkpoint-0.pth # train from scratch on 1.5Tb
         # weight_path = '../data/results/NormWear_Large_checkpoint-10.pth' # 24w (Currently reproducible the best)
-        weight_path = 'data/results/job_rand_maskv3_checkpoint-15470-correct.pth' # 1.5Tb (Currently reproducible the best)
+        # weight_path = 'data/results/job_rand_maskv3_checkpoint-15470-correct.pth' # 1.5Tb (Currently reproducible the best)
         # weight_path = '../data/results/meanfusion_checkpoint-12000.pth'
         # weight_path = '../data/results/freqmask-scratch_checkpoint-13470.pth'
         # weight_path = '../data/results/timemask-scratch_checkpoint-13470.pth'
         # weight_path = '../data/results/job_rand_maskv3_checkpoint-0epoch-6000_correct.pth'
         # '../data/results/model_mae_checkpoint-140.pth' # 37k
 
-        # # load pretrained checkpoint
-        # stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))['model']
+        # load pretrained checkpoint
+        stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))['model']
 
-        # # stat_dict = torch.load('../data/results/model_mae_checkpoint-140.pth', map_location=torch.device('cpu'))['model']
-        # self.backbone.load_state_dict(stat_dict)
-        # print("Model load successfull.")
+        # stat_dict = torch.load('../data/results/model_mae_checkpoint-140.pth', map_location=torch.device('cpu'))['model']
+        self.backbone.load_state_dict(stat_dict)
+        print("Model load successfull.")
 
         self.sampling_rate = 65
     

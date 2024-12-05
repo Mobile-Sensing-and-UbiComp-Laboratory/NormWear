@@ -9,20 +9,14 @@ DEVICE = torch.device('cuda:0') if torch.cuda.is_available() else torch.device("
 print("DEVICE:", DEVICE)
 
 # ============= helper functions ================================================
-def load_model(model_name='ast'):
+def load_model(model_name='stats', args=None):
     # all models should follows the function structure of AST_API
-    if model_name == 'ast':
-        model = AST_API()
-    elif model_name == 'clap':
+    if model_name == 'clap':
         model = CLAP_API()
-    elif model_name == 'opera':
-        model = OPERA_API()
     elif model_name == 'normwear':
-        model = NormWear_API()
+        model = NormWear_API(weight_path=args.model_weight_dir)
     elif model_name == 'chronos':
         model = Chronos_API()
-    elif model_name == 'healthmae':
-        model = HealthMAE_API()
     # added baselines
     elif model_name == 'stats':
         model = STAT_API()
@@ -47,9 +41,9 @@ def load_model(model_name='ast'):
 
     return model
 
-def audio_embedding_prepare(data_rootpath="audio_downstream/Coswara", model_name='ast', root_prefix="../", remark=""):
+def audio_embedding_prepare(data_rootpath="audio_downstream/Coswara", model_name='ast', root_prefix="../", remark="", args=None):
     # construct model
-    model = load_model(model_name=model_name)
+    model = load_model(model_name=model_name, args=args)
 
     save_remark = remark if len(remark) > 0 else model_name
 

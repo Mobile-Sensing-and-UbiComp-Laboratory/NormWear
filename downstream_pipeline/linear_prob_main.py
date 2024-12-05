@@ -25,7 +25,7 @@ def get_args_parser():
     parser.add_argument('--group', type=int, default=0)
     
     # Model parameters
-    parser.add_argument('--model_weight_dir', default='../data/results', type=str,
+    parser.add_argument('--model_weight_dir', default='data/results/job_rand_maskv3_checkpoint-15470-correct.pth', type=str,
                         help='path of model weight')
     parser.add_argument('--model_name', type=str,
                         help='Name of model to train')
