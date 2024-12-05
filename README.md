@@ -46,9 +46,9 @@ from NormWear.main_model import NormWearModel
 
 # config
 device = torch.device('cpu')
-weight_path = "path to checkpoint here"
 
-# init model
+### init model ##################################################################
+weight_path = "path to checkpoint here"
 model = NormWearModel(weight_path=weight_path, optimized_cwt=True).to(device)
 
 # generate data
@@ -56,11 +56,25 @@ sampling_rate = 64
 x = torch.rand(2, 3, sampling_rate*2).to(device) # test example: 2 samples, 3 sensor, sequence length of 2 seconds
 
 # encoding
-y = model.get_embedding(x, sampling_rate=sampling_rate, device=device) # bn, nvar, P, E
+out = model.get_embedding(x, sampling_rate=sampling_rate, device=device) # bn, nvar, P, E
 
 # log
 print("Input shape:", x.shape) # [2, 3, 128]
-print("Output shape:", y.shape) # [2, 3, P, 768]
+print("Output shape:", out.shape) # [2, 3, P, 768]
+
+### Example of aggregation across patches ########################################
+# Take [CLS]
+# embedding = out[:, :, 0, :] # [2, 3, 768]
+
+# Mean pooling
+# embedding = out.mean(dim=2) # [2, 3, 768]
+
+### Example of aggregation across channels #######################################
+# Concat
+# final_embedding = embedding.flatten(start_dim=1) # [2, 3*768]
+
+# Mean
+# final_embedding = embedding.mean(dim=1) # [2, 768]
 ```
 
 ### Zero shot inference
