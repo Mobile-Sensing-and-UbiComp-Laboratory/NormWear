@@ -83,7 +83,10 @@ print("Output shape:", out.shape) # [2, 3, P, 768]
 import torch
 ```
 
-## 🔥 Training
+## 🔧 Fine-tune
+TODO
+
+## 🔥 Pre-training
 TODO
 
 ## ❄️ Downstream Evaluation
@@ -91,10 +94,6 @@ TODO
 ```python
 import torch
 ```
-
-## :floppy_disk: Datasets information
-
-TODO
 
 ## 📝 Citation
 
@@ -114,4 +113,4 @@ If you find Chronos models useful for your research, please consider citing the 
 
 ## marker note
 
-🛡️ 📃
+🛡️ 📃 :floppy_disk: 
