@@ -253,7 +253,7 @@ class Chronos_API(nn.Module):
 
 # ===== BASELINE END ======================================================================
 
-from modules.normwear import *
+from ..modules.normwear import *
 
 def wt(ts, lf=0.1, hf=65, wl='gaus1', method='fft'):
     # in: L
