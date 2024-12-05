@@ -288,7 +288,7 @@ class NormWear_API(nn.Module):
         # '../data/results/NormWear_Huge_job_resume_checkpoint-1-correct.pth' # 2.5m
         # ../data/results/NormWear_Huge_job_checkpoint-0.pth # train from scratch on 1.5Tb
         # weight_path = '../data/results/NormWear_Large_checkpoint-10.pth' # 24w (Currently reproducible the best)
-        weight_path = '../data/results/job_rand_maskv3_checkpoint-15470.pth' # 1.5Tb (Currently reproducible the best)
+        weight_path = 'data/results/job_rand_maskv3_checkpoint-15470.pth' # 1.5Tb (Currently reproducible the best)
         # weight_path = '../data/results/meanfusion_checkpoint-12000.pth'
         # weight_path = '../data/results/freqmask-scratch_checkpoint-13470.pth'
         # weight_path = '../data/results/timemask-scratch_checkpoint-13470.pth'
