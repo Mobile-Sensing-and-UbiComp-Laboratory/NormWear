@@ -100,7 +100,7 @@ import torch
 
 ## 📝 Citation
 
-If you find Chronos models useful for your research, please consider citing the associated [paper]([https://arxiv.org/abs/2403.07815](https://TBD)):
+If you find NormWear model useful for your research, please consider citing the associated [paper]([https://arxiv.org/abs/2403.07815](https://TBD)):
 
 ```
 @misc{tbd,
