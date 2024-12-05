@@ -1,0 +1,16 @@
+
+// basic
+tqdm
+pandas
+
+// machine learning libraries
+Pytorch: https://pytorch.org/get-started/locally/
+transformers: https://huggingface.co/docs/transformers/en/installation
+sklearn: https://scikit-learn.org/1.5/install.html
+scipy: https://scipy.org/install/
+
+// baselines
+chronos: https://github.com/amazon-science/chronos-forecasting
+CLAP: https://github.com/microsoft/CLAP
+pytorch_pretrained_vit: https://github.com/lukemelas/PyTorch-Pretrained-ViT
+
