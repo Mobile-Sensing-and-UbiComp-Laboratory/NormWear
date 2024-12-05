@@ -129,7 +129,7 @@ class TFC_API(nn.Module):
         
         self.sampling_rate = sampling_rate
 
-        state_dict = torch.load("src/models/tfc/ckp_last.pt")["model_state_dict"]
+        state_dict = torch.load("NormWear/modules/model_ckpts/ckp_last.pt")["model_state_dict"]
 
         # configs.TSlength_aligned = 178
         # for k in state_dict:
