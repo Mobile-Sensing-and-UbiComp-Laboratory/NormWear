@@ -195,9 +195,6 @@ where the content in each file requires content in the following format:
 }
 ```
 
-## 🔧 Fine-tune
-TODO
-
 ## 📝 Citation
 
 If you find NormWear model useful for your research, please consider citing the associated [paper]([https://arxiv.org/abs/2403.07815](https://TBD)):
@@ -213,7 +210,3 @@ If you find NormWear model useful for your research, please consider citing the 
       url={https://arxiv.org/abs/tbd}, 
 }
 ```
-
-## marker note
-
-🛡️ 📃 :floppy_disk: 
