@@ -288,8 +288,8 @@ class NormWear_API(nn.Module):
         # '../data/results/NormWear_Huge_job_resume_checkpoint-1-correct.pth' # 2.5m
         # ../data/results/NormWear_Huge_job_checkpoint-0.pth # train from scratch on 1.5Tb
         # weight_path = '../data/results/NormWear_Large_checkpoint-10.pth' # 24w (Currently reproducible the best)
-        # weight_path = '../data/results/job_rand_maskv3_checkpoint-15470.pth' # 1.5Tb (Currently reproducible the best)
-        weight_path = '../data/results/meanfusion_checkpoint-12000.pth'
+        weight_path = '../data/results/job_rand_maskv3_checkpoint-15470.pth' # 1.5Tb (Currently reproducible the best)
+        # weight_path = '../data/results/meanfusion_checkpoint-12000.pth'
         # weight_path = '../data/results/freqmask-scratch_checkpoint-13470.pth'
         # weight_path = '../data/results/timemask-scratch_checkpoint-13470.pth'
         # weight_path = '../data/results/job_rand_maskv3_checkpoint-0epoch-6000_correct.pth'
@@ -330,7 +330,7 @@ class NormWear_API(nn.Module):
         # ====================================================================
 
         # forward
-        out, hiddens = self.backbone.forward_all(spec, hidden_out=True, device=device) # 1, nvar, P, E
+        out, hiddens = self.backbone.get_signal_embedding(spec, hidden_out=True, device=device) # 1, nvar, P, E
         # hidden: list([1, nvar, P, E])
 
         out = torch.mean(out[0, :, :, :], dim=1) # nvar, E
