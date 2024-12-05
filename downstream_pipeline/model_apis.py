@@ -122,7 +122,7 @@ class STAT_API(nn.Module):
         return audio_embedding
 
 import torch.fft as fft
-from .baseline_models.tfc.TFC.model import *
+from ..baseline_models.tfc.TFC.model import *
 class TFC_API(nn.Module):
     def __init__(self, sampling_rate=65):
         super().__init__()
@@ -376,7 +376,7 @@ class NormWear_API(nn.Module):
     def forward(self, x): 
         pass
 
-from .baseline_models.crossvit.crossvit import *
+from ..baseline_models.crossvit.crossvit import *
 class CrossVitAPI(nn.Module):
     def __init__(self):
         super().__init__()
