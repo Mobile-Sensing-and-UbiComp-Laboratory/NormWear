@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.functional as F
-from transformers import AutoTokenizer, AutoModelForCausalLM, AutoModel
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from ..main_model import *
 from .sentence_template import *
@@ -229,41 +229,26 @@ class NormWearZeroShot(nn.Module):
         self.nlp_model = freeze_model(AutoModelForCausalLM.from_pretrained("muzammil-eds/tinyllama-2.5T-Clinical-v2"))
         self.query_size = 2048
 
-        # self.tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
-        # self.nlp_model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
-        # self.query_size = 384
-
         # sensor encoder
         self.sensor_model = freeze_model(NormWearModel(weight_path=weight_path))
         self.aggregator = MSiTFAggregation(num_neurons=768, query_size=self.query_size, vae_out=True)
 
         # load pretrained weight
         if len(msitf_ckpt) > 0:
-            # possible checkpoints:
-            # ../data/audio_results/normwear_msitf/normwear_msitf_checkpoint-ctr.pth # contrastive learning
-            # ../data/results/matcher_trained_weights_embeddings_mae_var_20.pt
-
-            # # old one
-            # msitf_ckpt = "../data/results/matcher_trained_weights_embeddings_mae_var_20.pt"
-
-            local_weight_path = msitf_ckpt.replace("../", "")
-            if os.path.isfile(local_weight_path):
-                stat_dict = torch.load(local_weight_path, map_location=torch.device('cpu'))
-            else:
-                # stat_dict = torch.load(msitf_ckpt, map_location=torch.device('cpu'))['model']
-                stat_dict = torch.load(msitf_ckpt, map_location=torch.device('cpu'))['model']
-
-                # save weight in pod
-                root_comp = local_weight_path.split("/")
-                os.makedirs("/".join(root_comp[:-1]), exist_ok=True)
-                torch.save(stat_dict, "/".join(root_comp))
+            try:
+                stat_dict = torch.load(msitf_ckpt, map_location=torch.device('cpu'))
             
-            # comment this out if the error on model save is fixed
-            current_state_dict_keys = self.aggregator.state_dict().keys()
-            filtered_state_dict = {k.replace("aggregator.", ""): v for k, v in stat_dict.items() if k.replace("aggregator.", "") in current_state_dict_keys}
+                # # comment this out if the error on model save is fixed
+                # stat_dict = torch.load(msitf_ckpt, map_location=torch.device('cpu'))['model']
+                # current_state_dict_keys = self.aggregator.state_dict().keys()
+                # filtered_state_dict = {k.replace("aggregator.", ""): v for k, v in stat_dict.items() if k.replace("aggregator.", "") in current_state_dict_keys}
+                filtered_state_dict = stat_dict
 
-            # load
-            self.aggregator.load_state_dict(filtered_state_dict)
+                # load
+                self.aggregator.load_state_dict(filtered_state_dict)
+                print("MSiTF Checkpoint is successfully loaded!")
+            except:
+                print("Error occur during loading checkpoint, please check.")
 
         # loss
         loss_l1 = nn.L1Loss()
@@ -288,17 +273,52 @@ class NormWearZeroShot(nn.Module):
         inputs = self.tokenizer(sentences, padding=True, return_tensors="pt").to(self.nlp_model.device)
         out = self.nlp_model(**inputs, output_hidden_states=True)
         return mean_pooling(out, inputs.attention_mask) # N, 2048
+    
+    def signal_encode(self, x, query, sampling_rate=65):
+        # x: [bn, nvar, L]
+        device = x.device
 
-    def forward(self, x, task, label=None):
-        # x: input for normwear, # [bn, nvar, 3, L, n_mels]
-        # x: [updated] [bn, nvar, L]
+        # sensor encoding
+        sensor_out = self.sensor_model.get_embedding(x, sampling_rate=sampling_rate, device=device) # bn, nvar, P, E
+
+        if query.shape[0] == 1: # if single question for all samples in input batch
+            query = query.expand(sensor_out.shape[0], query.shape[1]) # (bn, 2048)
+        
+        # aggregate
+        bn, nvar, P, E  = sensor_out.shape
+
+        query = query.unsqueeze(1).expand(bn, nvar*P, query.shape[1]) # (bn, nvar, 2048)
+
+        # per channel aggregate
+        ch_aggregate_out = self.aggregator(
+            sensor_out, 
+            query,
+            device=device,
+            rel_only=self.rel_only,
+            use_query=self.use_query
+        ) # bn*nvar, E
+
+        return ch_aggregate_out
+
+    def inference(self, signal_embed, option_embed):
+        # Manhattan distance
+        distances = torch.abs(signal_embed[:, None, :] - option_embed[None, :, :]).sum(dim=-1) # bn, num_choice
+
+        # # dot product
+        # distances = 1 / torch.matmul(signal_embed, option_embed.T)  # bn, num_choice
+
+        sims = distances
+        sims = 1 - (sims / torch.sum(sims, dim=1, keepdim=True))
+        sims = torch.nan_to_num(sims) + 1e-8 # bn, num_choice
+
+        y_preds = nn.functional.softmax(sims.float(), dim=1) # bn, num_choice
+        return y_preds
+
+    def forward(self, x, task, label=None, sampling_rate=65):
+        # x: [bn, nvar, L]
         # task, label: string for sentence template match
         # label: None if query only
-        device = x.device
         # x = torch.nan_to_num(x) # numerical stability
-
-        # sensor forward
-        sensor_out = self.sensor_model.encode(x, device=device) # bn, nvar, P, E
         
         # text forward
         txt_embed_res = txt_encode(task=task, label=label, model=self) # (bn, E), (bn, E)
@@ -308,32 +328,9 @@ class NormWearZeroShot(nn.Module):
             query, gt = txt_embed_res
         else:
             query = txt_embed_res
-        if query.shape[0] == 1: # if single question for all samples in input batch
-            query = query.expand(sensor_out.shape[0], query.shape[1]) # (bn, 2048)
 
-        # aggregate
-        bn, nvar, P, E  = sensor_out.shape
+        sensor_embed = self.signal_encode(x, query, sampling_rate=sampling_rate)
 
-        query = query.unsqueeze(1).expand(bn, nvar*P, query.shape[1]) # (bn, nvar, 2048)
-
-        # per channel aggregate
-        ch_aggregate_out = self.aggregator(
-            # sensor_out.reshape(bn*nvar, P, E), 
-            sensor_out, 
-            # query.reshape(bn, nvar, query.shape[-1]), 
-            query,
-            device=device,
-            rel_only=self.rel_only,
-            use_query=self.use_query
-        ) # bn*nvar, E
-        # print(ch_aggregate_out.shape)
-        # exit()
-
-        # sensor_embed = ch_aggregate_out.reshape(bn, nvar, self.query_size).mean(dim=1) # bn, txt_E
-        sensor_embed = ch_aggregate_out
-
-        # # final aggregate
-        # sensor_embed = self.aggregator(ch_aggregate_out.reshape(bn, nvar, E), query, calc_recency=False, device=device) # bn, E
         
         if label is None:
             return sensor_embed

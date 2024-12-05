@@ -6,7 +6,6 @@ import pickle
 from tqdm import tqdm
 from sklearn.metrics import roc_auc_score
 
-# from src.downstream.model_apis import *
 from .msitf_fusion import *
 from ..downstream_pipeline.task_specification import *
 
@@ -18,12 +17,8 @@ def load_model(model_name='normwear'):
     # all models should follows the function structure of AST_API
     if model_name == 'normwear':
         # model = NormWearZeroShot() # random init
-        # msitf_ckpt = "../data/audio_results/normwear_msitf/normwear_msitf_checkpoint-correct-incorrect.pth"
-        # msitf_ckpt = "../data/audio_results/normwear_msitf/normwear_msitf_checkpoint-ctr.pth"
-        # msitf_ckpt = "../data/audio_results/normwear_msitf/normwear_msitf_checkpoint-1.pth"
         msitf_ckpt = "../data/audio_results/normwear_msitf_clean/normwear_msitf_clean_checkpoint-5.pth"
         # msitf_ckpt = "../data/audio_results/normwear_msitf_clean/normwear_msitf_clean_checkpoint-15.pth"
-        # msitf_ckpt = ""
         model = NormWearZeroShot(msitf_ckpt=msitf_ckpt)
     # elif model_name == 'clap':
     #     model = CLAP_API()
