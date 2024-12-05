@@ -33,9 +33,6 @@ cd NormWear && pip install --editable ".[TBD]"
 
 The pretrained model checkpoint can be found in Release [TBD].
 
-> [!TIP]  
-> This repository is intended for research purposes ...
-
 ### Extracting Encoder Embeddings
 
 An example showing how to get signal embedding using NormWear:
@@ -84,7 +81,11 @@ print("Output shape:", out.shape) # [2, 3, P, 768]
 
 ```python
 import torch
+# TODO
 ```
+
+> [!TIP]  
+> For the best performance, conduct prompt engineering on the query could be a good practice. 
 
 ## 🔧 Fine-tune
 TODO
@@ -94,8 +95,58 @@ TODO
 
 ## ❄️ Downstream Evaluation
 
+To run the evaluation on the downstream datasets, run the following command:
+```sh
+python3 -m NormWear.downstream_main
+```
+
+
+| Required Parameter         | Type      | Default   | Description                                                                 |
+|-------------------|-----------|-----------|-----------------------------------------------------------------------------|
+| `--model_name`   | `<string>`  | `normwear` | Supported models are [stats, chronos, clap, tfc, normwear]                                 |
+| `--model_weight_dir`   | `<string>`  | `""` | Path to the model checkpoint, only `normwear` need this parameter.                           |
+| `--group`   | `<int>`  | `0` | Run a group of downstream tasks. The group can be customized in `NormWear/downstream_main.py` |
+| `--data_path`   | `<string>`  | `../data` | Root path for where the downstream data is placed. |
+| `--num_runs`   | `<int>`  | `1` | Number of repetition for running the evaluation of each task. |
+| `--prepare_embed`   | `<int>`  | `1` | Run the inference and save the embeddings before sending them to evaluation. Set to `1` to overwrite previous saved embedding if there are any. |
+| `--remark`   | `<string>`  | `""` | Name to mark the current experimental trail. By default, all the embeddings are stored under a subfolder named as `--model_name` under the folder of each downstream data. |
+
+An example bash command would be:
+```sh
+python3 -m NormWear.downstream_main --model_name normwear --model_weight_dir data/results/job_rand_maskv3_checkpoint-15470-correct.pth --group 0 --data_path ../data --num_runs 1 --prepare_embed 1 --remark test_run
+```
+
+#### The processed clean downstream datasets can be downloaded from [here](https://drive.google.com/file/d/1bcs5mitwznrbnZDarnRVuz5x2MuSWw20/view?usp=sharing). 
+
+### ✏️ For adding a downstream dataset, please following the format:
+```bash
+name_of_new_dataset/
+├── sample_for_downstream/
+│   ├── name_of_sample_0.pkl
+│   ├── name_of_sample_1.pkl
+│   ├── name_of_sample_2.pkl
+│   └── ...
+└── train_test_split.json
+```
+where the content in each file requires content in the following format:
 ```python
-import torch
+# data content in name_of_sample_i.pkl
+{
+    "uid": "", # subject ID identifier
+    "data": np.array(sensor_data_here).astype(np.float16), # float numpy array with shape of [num_channels, sequence_length]
+    "sampling_rate": 64, # put the correct sampling rate of the sensor signal here. 
+    "label": [ # label for each task on this dataset. 'class' for classification and 'reg' for regression.
+        {"class": label}, 
+        {"reg": label},
+        ...
+    ]
+}
+
+# data content in train_test_split.json
+{
+  'train': ["name_of_sample_i.pkl", "name_of_sample_j.pkl", "name_of_sample_k.pkl", ...],
+  'test': ["name_of_sample_l.pkl", "name_of_sample_m.pkl", "name_of_sample_n.pkl", ...]
+}
 ```
 
 ## 📝 Citation
