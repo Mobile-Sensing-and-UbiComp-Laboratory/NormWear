@@ -165,7 +165,7 @@ class NormWear(nn.Module):
                  curr_layer = i,
                  # fusion scheme
                  no_fusion=False, # False
-                 mean_fuse=True, # False
+                 mean_fuse=False, # False
                 )
             for i in range(depth)])
         

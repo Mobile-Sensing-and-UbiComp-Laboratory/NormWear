@@ -1,3 +1,4 @@
-**/__pycache__/
-**/model_ckpts/
 **.DS_Store
+**/__pycache__/
+
+**/model_ckpts/
