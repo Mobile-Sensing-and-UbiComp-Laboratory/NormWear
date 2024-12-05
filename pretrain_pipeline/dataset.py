@@ -9,7 +9,8 @@ import torch
 # from torch.utils.data import DataLoader, Subset
 from torch.utils.data import DataLoader
 from torch.utils.data._utils.collate import default_collate
-# import torch.nn.functional as F
+import torch.nn.functional as F
+import json
 
 class LinearProbDataset(Dataset):
     def __init__(self,fnames,task): 
@@ -143,8 +144,111 @@ def collate_fn(batch, pad_nvar=4):
 
     return {'target': padded_targets, 'input': padded_inputs}
 
+##############CWT Helper function########################################################################################################
+def ricker_wavelet(points, scale):
+    """Generate the Ricker (Mexican hat) wavelet for a given scale."""
+    # a = scale
+    # A = 2 / (torch.sqrt(3 * a) * torch.pi**0.25)  # Normalization factor
+    # wavelet = A * (1 - (t / a)**2) * torch.exp(-0.5 * (t / a)**2)
+    # return wavelet
 
+    A = 2 / (torch.sqrt(3 * scale) * torch.pi**0.25)  # Normalization factor
+    wsq = scale**2
+    vec = torch.arange(0, points, device=scale.device) - (points - 1.0) / 2
+    xsq = vec**2
+    mod = (1 - xsq / wsq)
+    gauss = torch.exp(-xsq / (2 * wsq))
+    wavelet = A * mod * gauss
+    return wavelet
 
+def cwt_ricker(x, lowest_scale, largest_scale, step=1, wavelet_len=100):
+    """
+    Compute the CWT using the Ricker wavelet in PyTorch with simplified inputs.
+    
+    Args:
+        x (torch.Tensor): Input time-series of shape (batch_size, sequence_length).
+        lowest_scale (float): The lowest scale for the wavelet.
+        largest_scale (float): The largest scale for the wavelet.
+        step (float): Step size for generating scales.
+        wavelet_len (int): Length of the wavelet.
+        
+    Returns:
+        torch.Tensor: CWT scalogram of shape (batch_size, num_scales, sequence_length).
+    """
+    batch_size, sequence_length = x.shape
+    x = x.unsqueeze(1)  # Add channel dimension, now (batch_size, 1, sequence_length)
+    
+    # Generate scales
+    scales = torch.arange(lowest_scale, largest_scale + step, step, device=x.device)
+    num_scales = scales.shape[0]
+    
+    # Prepare the wavelet basis for each scale
+    # t = torch.linspace(-wavelet_len // 2, wavelet_len // 2, wavelet_len, device=x.device)
+    wavelet_len = min(10*largest_scale, sequence_length)
+    wavelets = torch.stack([ricker_wavelet(wavelet_len, scale) for scale in scales])
+    # wavelets = torch.stack([ricker_wavelet(min(10*scale, sequence_length), scale) for scale in scales])
+    wavelets = wavelets.view(num_scales, 1, -1)  # (num_scales, 1, wavelet_len)
+    
+    # Perform convolution for each scale
+    cwt_output = F.conv1d(x, wavelets, padding=wavelet_len // 2)
+    
+    return cwt_output
+
+def cwt_wrap(x, lowest_scale=0.1, largest_scale=64, step=1, wavelet_len=100):
+    # x: bn, L
+    # return: bn, 3, L, n_mels
+    d1 = x[:, 1:] - x[:, :-1]  # bn, L-1
+    d2 = d1[:, 1:] - d1[:, :-1] # bn, L-2
+    x = torch.stack([x[:, 2:], d1[:, 1:], d2]).float().permute(1, 0, 2) # bn, 3, L-1
+    bn, n_, new_L = x.shape
+    cwt_res = cwt_ricker(x.reshape(bn*n_, new_L), lowest_scale, largest_scale, step=step, wavelet_len=wavelet_len) # bn*3, 65, new_L
+    _, n_scale, new_L = cwt_res.shape
+    return cwt_res.reshape(bn, n_, n_scale, new_L).permute(0, 1, 3, 2) # bn, 3, L, n_mels
+
+#################################################################################
+# Finetune Data loader
+class dataset_class(Dataset):
+    def __init__(self, data_dir,is_train=True,max_len=390,use_spec=False):
+        super(dataset_class, self).__init__()
+        
+        self.data_dir = data_dir
+        with open(os.path.join(self.data_dir,'train_test_split.json'), 'r') as file:
+            split = json.load(file) # a dictionary with key 'train', 'test'
+        
+        if is_train:
+            self.data_fn = split['train']
+        else:
+            self.data_fn = split['test']
+
+        self.max_len = max_len
+        self.use_spec = use_spec
+    def __getitem__(self, idx):
+        curr_fn = self.data_fn[idx]
+        with open(os.path.join(self.data_dir,'sample_for_downstream',curr_fn),'rb') as file:
+            data = pickle.load(file)
+
+        tss = torch.from_numpy(data['data']).float()
+        tss = torch.nan_to_num(tss,0.0)
+        label = torch.tensor(data['label'][0]['class'])
+
+        # Pad `tss` to `max_len` by repeating the first column
+        if tss.shape[1] < self.max_len:  # Check if `L < max_len`
+            pad_size = self.max_len - tss.shape[1]
+            # Repeat the first column `pad_size` times
+            pad = tss[:, 0:1].repeat(1, pad_size)  # Shape: [nvar, pad_size]
+            # Concatenate padding at the beginning
+            tss = torch.cat((pad, tss), dim=1)     # Final shape: [nvar, max_len]
+
+        if self.use_spec:
+            # calculate spectrogram
+            cwt = cwt_wrap(tss) # nvar, 3, L, n_mels
+            return {'input':cwt, 'label':label}
+
+        else: return tss, label, 0 # make training script happy
+
+    def __len__(self):
+        return len(self.data_fn)
+    
 # example usage
 if __name__ == '__main__':
     dataset_train = PretrainDataset(
