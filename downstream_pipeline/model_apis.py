@@ -295,21 +295,12 @@ class NormWear_API(nn.Module):
         # weight_path = '../data/results/job_rand_maskv3_checkpoint-0epoch-6000_correct.pth'
         # '../data/results/model_mae_checkpoint-140.pth' # 37k
 
-        # load pretrained checkpoint
-        local_weight_path = weight_path.replace("../", "")
-        if os.path.isfile(local_weight_path):
-            stat_dict = torch.load(local_weight_path, map_location=torch.device('cpu'))
-        else:
-            stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))['model']
+        # # load pretrained checkpoint
+        # stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))['model']
 
-            # save weight in pod
-            root_comp = local_weight_path.split("/")
-            os.makedirs("/".join(root_comp[:-1]), exist_ok=True)
-            torch.save(stat_dict, "/".join(root_comp))
-
-        # stat_dict = torch.load('../data/results/model_mae_checkpoint-140.pth', map_location=torch.device('cpu'))['model']
-        self.backbone.load_state_dict(stat_dict)
-        print("Model load successfull.")
+        # # stat_dict = torch.load('../data/results/model_mae_checkpoint-140.pth', map_location=torch.device('cpu'))['model']
+        # self.backbone.load_state_dict(stat_dict)
+        # print("Model load successfull.")
 
         self.sampling_rate = 65
     
