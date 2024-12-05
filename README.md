@@ -3,9 +3,8 @@
 # 🚀 NormWear: A Foundation Model for Multivariate Wearable Sensing of Physiological Signals.
 
 [![preprint](https://img.shields.io/static/v1?label=arXiv&message=TBD&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/TBD)
-[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-FFD21E)](https://huggingface.co/datasets/TBD)
-[![huggingface](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models-FFD21E)](https://huggingface.co/collections/TBD)
-[![License: MIT](https://img.shields.io/badge/License-Apache--2.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub Release](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha)
+[![Google Drive](https://img.shields.io/badge/Google%20Drive-4285F4?logo=googledrive&logoColor=fff)](https://drive.google.com/file/d/1bcs5mitwznrbnZDarnRVuz5x2MuSWw20/view?usp=sharing)
 
 </div>
 
