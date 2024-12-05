@@ -157,6 +157,12 @@ def launch_linear_prob(args, embed_root, all_fns):
         all_scores_s = 100*np.std(np.array(task_scores[task]), axis=0) # num_score
 
         scores = ""
+        if len(all_scores_m) > 1:
+            print("Scores following order: AUC ROC, AP, Accuracy, Precision, Recall, F1-score")
+        else:
+            print("Mean relative accuracy:")
+        
+        # print
         for s_i in range(len(all_scores_m)):
             scores += "{} +- {}, ".format(
                 round(all_scores_m[s_i], 3),

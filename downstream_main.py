@@ -97,7 +97,8 @@ if __name__ == '__main__':
         torch.cuda.empty_cache()
 
         # log for file transfer
-    print("kubectl cp {}:data/results/downstream_results/{} data/results/{}".format(pod_name, save_fname, save_fname))
+    # print("kubectl cp {}:data/results/downstream_results/{} data/results/{}".format(pod_name, save_fname, save_fname))
+    print("Evaluation process complete.")
 
     # python3 -m downstream_all --model_name healthmae --num_runs 2 --group 2 --prepare_embed 1 --batch_size 256
     # CUDA_VISIBLE_DEVICES=1 python3 -m downstream_all --model_name healthmae --num_runs 2 --group 2 --prepare_embed 1 --batch_size 256
