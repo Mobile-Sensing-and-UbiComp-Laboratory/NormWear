@@ -21,15 +21,17 @@ Time-series foundation models have the ability to run inference, mainly forecast
 
 ## 📈 Usage
 
-Download: TBD
+Download: 
 
 ```sh
 # Clone the repository
 git clone git@github.com:Mobile-Sensing-and-UbiComp-Laboratory/NormWear.git
 
 # Install in editable mode with extra training-related dependencies
-cd NormWear && pip install --editable ".[training]"
+cd NormWear && pip install --editable ".[TBD]"
 ```
+
+The pretrained model checkpoint can be found in Release [TBD].
 
 > [!TIP]  
 > This repository is intended for research purposes ...
@@ -39,17 +41,29 @@ cd NormWear && pip install --editable ".[training]"
 An example showing how to get signal embedding using NormWear:
 
 ```python
-import pandas as pd  # requires: pip install pandas
 import torch
+from NormWear.main_model import NormWearModel
+
+# config
+device = torch.device('cpu')
+weight_path = "path to checkpoint here"
+
+# init model
+model = NormWearModel(weight_path=weight_path, optimized_cwt=True).to(device)
+
+# generate data
+sampling_rate = 64
+x = torch.rand(2, 3, sampling_rate*2).to(device) # test example: 2 samples, 3 sensor, sequence length of 2 seconds
+
+# encoding
+y = model.get_embedding(x, sampling_rate=sampling_rate, device=device) # bn, nvar, P, E
+
+# log
+print("Input shape:", x.shape) # [2, 3, 128]
+print("Output shape:", y.shape) # [2, 3, P, 768]
 ```
 
-### Zero shot inference:
-
-```python
-import torch
-```
-
-### Linear probing:
+### Zero shot inference
 
 ```python
 import torch
@@ -58,7 +72,13 @@ import torch
 ## 🔥 Training
 TODO
 
-## :floppy_disk: Datasets
+## ❄️ Downstream Evaluation
+
+```python
+import torch
+```
+
+## :floppy_disk: Datasets information
 
 TODO
 
