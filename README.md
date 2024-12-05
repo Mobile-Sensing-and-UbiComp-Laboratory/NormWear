@@ -3,8 +3,8 @@
 # 🚀 NormWear: A Foundation Model for Multivariate Wearable Sensing of Physiological Signals.
 
 [![preprint](https://img.shields.io/static/v1?label=arXiv&message=TBD&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/TBD)
-[![GitHub Release](https://img.shields.io/badge/GitHub-%23121011.svg?logo=github&logoColor=white)](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha)
-[![Google Drive](https://img.shields.io/badge/Google%20Drive-4285F4?logo=googledrive&logoColor=fff)](https://drive.google.com/file/d/1bcs5mitwznrbnZDarnRVuz5x2MuSWw20/view?usp=sharing)
+[![ckpt-release](https://img.shields.io/badge/Github_Release-Model_Checkpoint-black?logo=github&logoColor=white)](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha)
+[![downstream](https://img.shields.io/badge/Google_Drive-Downstream_Datasets-blue?logo=googledrive&logoColor=fff)](https://drive.google.com/file/d/1Mojf_iby8FnUydogwUE-b321fB1V6SGK/view?usp=sharing)
 
 </div>
 
@@ -112,7 +112,7 @@ An example bash command would be:
 CUDA_VISIBLE_DEVICES=0 python3 -m NormWear.downstream_main --model_name normwear --model_weight_dir data/results/normwear_last_checkpoint-15470-correct.pth --group 0 --data_path ../data --num_runs 1 --prepare_embed 1 --remark test_run
 ```
 
-#### The processed clean downstream datasets can be downloaded from [here](https://drive.google.com/file/d/1bcs5mitwznrbnZDarnRVuz5x2MuSWw20/view?usp=sharing). 
+#### The processed clean downstream datasets can be downloaded from [here](https://drive.google.com/file/d/1Mojf_iby8FnUydogwUE-b321fB1V6SGK/view?usp=sharing). 
 
 ### ✏️ For adding a downstream dataset, please following the format:
 ```bash
