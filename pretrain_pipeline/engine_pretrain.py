@@ -15,20 +15,6 @@ import torch
 
 from . import misc
 
-def adjust_learning_rate(optimizer, epoch, args):
-    """Decay the learning rate with half-cycle cosine after warmup"""
-    if epoch < args.warmup_epochs:
-        lr = args.lr * epoch / args.warmup_epochs 
-    else:
-        lr = args.min_lr + (args.lr - args.min_lr) * 0.5 * \
-            (1. + math.cos(math.pi * (epoch - args.warmup_epochs) / (args.epochs - args.warmup_epochs)))
-    for param_group in optimizer.param_groups:
-        if "lr_scale" in param_group:
-            param_group["lr"] = lr * param_group["lr_scale"]
-        else:
-            param_group["lr"] = lr
-    return lr
-
 def train_one_epoch(model: torch.nn.Module,
                     data_loader: Iterable, optimizer: torch.optim.Optimizer,
                     device: torch.device, epoch: int, loss_scaler,
@@ -51,7 +37,7 @@ def train_one_epoch(model: torch.nn.Module,
 
         # we use a per iteration (instead of per epoch) lr scheduler
         if data_iter_step % accum_iter == 0:
-            adjust_learning_rate(optimizer, data_iter_step / len(data_loader) + epoch, args)
+            misc.adjust_learning_rate(optimizer, data_iter_step / len(data_loader) + epoch, args)
 
         if args.use_cwt:
             samples = batch['input'].to(device, non_blocking=True)
