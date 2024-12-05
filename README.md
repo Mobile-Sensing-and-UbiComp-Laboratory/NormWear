@@ -80,7 +80,57 @@ print("Output shape:", out.shape) # [2, 3, P, 768]
 
 ```python
 import torch
-# TODO
+from NormWear.zero_shot.msitf_fusion import NormWearZeroShot
+
+# config
+device = torch.device('cpu')
+
+### init model ##################################################################
+# weight_path = "weight path here"
+# msitf_ckpt = "fusion weight path here"
+
+model = NormWearZeroShot(
+    weight_path=weight_path, 
+    msitf_ckpt=msitf_ckpt
+).to(device)
+
+### generate data ###############################################################
+sampling_rate = 64
+x = torch.rand(2, 3, sampling_rate*2).to(device) # test example: 2 samples, 3 sensor, sequence length of 2 seconds
+
+# setup question and options
+task_of_interest = [
+    "Is the person doing good?"
+]
+
+options = [
+    "The person is doing so so",
+    "The person is under stress.",
+    "The person is having fun.",
+]
+
+### Inference ###################################################################
+# text encoding
+txt_embed = model.txt_encode(task_of_interest+options) # [4, 2048]
+
+query_embed, option_embed = txt_embed[:1, :], txt_embed[1:, :]
+
+# signal encoding
+signal_embed = model.signal_encode(x, query_embed, sampling_rate=sampling_rate) # bn, nvar, P, E
+
+# calculate distance
+pred_prob = model.inference(signal_embed, option_embed) # bn, num_options
+pred = torch.argmax(pred_prob, dim=1).numpy()
+
+### check output ################################################################
+for i in range(len(x)):
+    print("Sample {} inference: {}".format(i, options[pred[i]]))
+
+# log
+print("Input shape:", x.shape) # [2, 3, 128]
+print("Text embed shape:", txt_embed.shape) # [4, 2048]
+print("Signal embed shape:", signal_embed.shape) # [2, 3, P, 768]
+print("Inference probability shape:", pred_prob.shape) # # [2, num_options]
 ```
 
 > [!TIP]  
