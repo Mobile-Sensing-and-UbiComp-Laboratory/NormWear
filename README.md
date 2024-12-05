@@ -31,7 +31,7 @@ git clone git@github.com:Mobile-Sensing-and-UbiComp-Laboratory/NormWear.git
 cd NormWear && pip install --editable ".[TBD]"
 ```
 
-The pretrained model checkpoint can be found in Release [TBD].
+The pretrained model checkpoint can be found in [Release](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha).
 
 ### Extracting Encoder Embeddings
 
@@ -113,7 +113,7 @@ python3 -m NormWear.downstream_main
 
 An example bash command would be:
 ```sh
-CUDA_VISIBLE_DEVICES=0 python3 -m NormWear.downstream_main --model_name normwear --model_weight_dir data/results/job_rand_maskv3_checkpoint-15470-correct.pth --group 0 --data_path ../data --num_runs 1 --prepare_embed 1 --remark test_run
+CUDA_VISIBLE_DEVICES=0 python3 -m NormWear.downstream_main --model_name normwear --model_weight_dir data/results/normwear_last_checkpoint-15470-correct.pth --group 0 --data_path ../data --num_runs 1 --prepare_embed 1 --remark test_run
 ```
 
 #### The processed clean downstream datasets can be downloaded from [here](https://drive.google.com/file/d/1bcs5mitwznrbnZDarnRVuz5x2MuSWw20/view?usp=sharing). 
