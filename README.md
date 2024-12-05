@@ -87,9 +87,6 @@ import torch
 > [!TIP]  
 > For the best performance, conduct prompt engineering on the query could be a good practice. 
 
-## 🔧 Fine-tune
-TODO
-
 ## 🔥 Pre-training
 TODO
 
@@ -148,6 +145,9 @@ where the content in each file requires content in the following format:
   'test': ["name_of_sample_l.pkl", "name_of_sample_m.pkl", "name_of_sample_n.pkl", ...]
 }
 ```
+
+## 🔧 Fine-tune
+TODO
 
 ## 📝 Citation
 
