@@ -30,7 +30,7 @@ class NormWearModel(nn.Module):
             self, 
             optimized_cwt=False, 
             use_cwt=True,
-            weight_path='modules/normwear_ckpt-15470.pth'
+            weight_path=""
         ):
         super().__init__()
 
@@ -38,6 +38,7 @@ class NormWearModel(nn.Module):
         # weight_path = '../data/results/model_mae_checkpoint-140.pth' # 37k
         # weight_path = '../data/results/NormWear_Large_checkpoint-10.pth' # 24w 
         # weight_path = '../data/results/job_rand_maskv3_checkpoint-15470.pth' # 1.5Tb
+        # 'modules/normwear_ckpt-15470.pth'
         
         self.optimized_cwt = optimized_cwt
 
@@ -45,10 +46,14 @@ class NormWearModel(nn.Module):
         self.backbone = NormWear(img_size=(387,65), patch_size=(9,5),mask_scheme='random',mask_prob=0.8,use_cwt=use_cwt,nvar=4, comb_freq=False)
 
         # load pretrained checkpoint
-        stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))['model']
+        if len(weight_path) > 0:
+            try:
+                stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))['model']
 
-        self.backbone.load_state_dict(stat_dict)
-        print("Model Checkpoint is successfully loaded!")
+                self.backbone.load_state_dict(stat_dict)
+                print("Model Checkpoint is successfully loaded!")
+            except:
+                print("Error occur during loading checkpoint, please check.")
 
         self.sampling_rate = 65
     
