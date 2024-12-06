@@ -182,7 +182,7 @@ An example bash command would be:
 CUDA_VISIBLE_DEVICES=0 python3 -m NormWear.downstream_main --model_name normwear --model_weight_dir data/results/normwear_last_checkpoint-15470-correct.pth --group 0 --data_path ../data --num_runs 1 --prepare_embed 1 --remark test_run
 ```
 
-#### The processed clean downstream datasets can be downloaded from [here](https://drive.google.com/file/d/1Mojf_iby8FnUydogwUE-b321fB1V6SGK/view?usp=sharing). 
+#### :floppy_disk: The processed clean downstream datasets can be downloaded from [here](https://drive.google.com/file/d/1Mojf_iby8FnUydogwUE-b321fB1V6SGK/view?usp=sharing). 
 
 ### ✏️ For adding a downstream dataset, please following the format:
 ```bash
