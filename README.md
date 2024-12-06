@@ -149,6 +149,8 @@ python3 -m NormWear.pretrain_main
 | `--warmup_epochs`   | `<int>`  | `10` | Number of epochs to increase learning rate from a small number to `blr`.  |
 | `--target_len`      | `<int>`  | `388` | Sequence length of the reconstructed time series |
 | `--weight_decay`   | `<float>`  | `5e-2` | Regularization coefficient of L2 penalty on model parameters. |
+| `--mask_scheme`   | `<str>`  | `random` | Masking scheme for pretext task (choose from 'random' and 'struc')  |
+| `--mask__prob`   | `<float>`  | `0.8` | Masking ratio for random masking  |
 | `--mask_t_prob`   | `<float>`  | `0.6` | Masking ratio along time axis of the scalogram. |
 | `--mask_f_prob`   | `<float>`  | `0.5` | Masking ratio along scale axis of the scalogram.  |
 | `--remark`   | `<string>`  | `""` | Name to mark the current experimental trail. |
@@ -214,7 +216,15 @@ where the content in each file requires content in the following format:
   'test': ["name_of_sample_l.pkl", "name_of_sample_m.pkl", "name_of_sample_n.pkl", ...]
 }
 ```
-
+### 🔥 Finetuning model for downstream datasets
+To run the evaluation on the downstream datasets, run the following command:
+```sh
+python -m main_finetune --ds_name <dataset_name> --checkpoint <weight_path>
+```
+For multiple gpus, run:
+```sh
+torchrun --nproc_per_node=<number of device> main_finetune.py --world_size <number of device> --ds_name <dataset_name> --checkpoint <weight_path>
+```
 ## 📝 Citation
 
 If you find NormWear model useful for your research, please consider citing the associated [paper]([https://arxiv.org/abs/2403.07815](https://TBD)):
