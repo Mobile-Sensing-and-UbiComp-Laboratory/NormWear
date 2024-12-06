@@ -25,10 +25,8 @@ Download:
 ```sh
 # Clone the repository
 git clone git@github.com:Mobile-Sensing-and-UbiComp-Laboratory/NormWear.git
-
-# Install in editable mode with extra training-related dependencies
-cd NormWear && pip install --editable ".[TBD]"
 ```
+The python libraries dependencies are specified in `NormWear/dependencies.txt`, with an example bash script `NormWear/config_env.sh`. 
 
 The pretrained model checkpoint can be found in [Release](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha).
 
