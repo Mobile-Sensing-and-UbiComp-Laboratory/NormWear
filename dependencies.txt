@@ -14,5 +14,4 @@ timm: https://pypi.org/project/timm/
 
 // baselines
 chronos: https://github.com/amazon-science/chronos-forecasting
-CLAP: https://github.com/microsoft/CLAP
 pytorch_pretrained_vit: https://github.com/lukemelas/PyTorch-Pretrained-ViT

@@ -224,10 +224,13 @@ class CLAP_API(nn.Module):
 
         return audio_embedding
 
-from chronos import ChronosPipeline
 class Chronos_API(nn.Module):
     def __init__(self):
         super().__init__()
+
+        # import required lib
+        from chronos import ChronosPipeline
+
         self.backbone = ChronosPipeline.from_pretrained(
             "amazon/chronos-t5-large",
             device_map="cuda",  # use "cpu" for CPU inference and "mps" for Apple Silicon
