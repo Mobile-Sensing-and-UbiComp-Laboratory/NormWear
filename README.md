@@ -137,7 +137,29 @@ print("Inference probability shape:", pred_prob.shape) # # [2, num_options]
 > For the best performance, conduct prompt engineering on the query could be a good practice. 
 
 ## 🔥 Pre-training
-TODO
+To run the evaluation on the downstream datasets, run the following command:
+```sh
+python3 -m NormWear.pretrain_main
+```
+
+
+| Required Parameter         | Type      | Default   | Description                                                     |
+|---------------------|-----------|-----------|-----------------------------------------------------------------------|
+| `--batch_size`      | `<int>`  | `4` | Number of input samples for each round of forward and backpropagation.       |
+| `--epochs`          | `<int>`  | `400` | Number of epochs.                        |
+| `--blr`             | `<float>`  | `1e-3` | base learning rate: absolute_lr = base_lr * total_batch_size / 256 |
+| `--warmup_epochs`   | `<int>`  | `10` | Number of epochs to increase learning rate from a small number to `blr`.  |
+| `--target_len`      | `<int>`  | `388` | Sequence length of the reconstructed time series |
+| `--weight_decay`   | `<float>`  | `5e-2` | Regularization coefficient of L2 penalty on model parameters. |
+| `--mask_t_prob`   | `<float>`  | `0.6` | Masking ratio along time axis of the scalogram. |
+| `--mask_f_prob`   | `<float>`  | `0.5` | Masking ratio along scale axis of the scalogram.  |
+| `--remark`   | `<string>`  | `""` | Name to mark the current experimental trail. |
+
+An example bash command would be:
+```sh
+torchrun --nproc_per_node=4 --master_port=12345 -m NormWear.pretrain_main --batch_size 256 --epochs 100 --warmup_epochs 4 --remark test_run
+```
+
 
 ## ❄️ Downstream Evaluation
 
@@ -148,10 +170,10 @@ python3 -m NormWear.downstream_main
 
 
 | Required Parameter         | Type      | Default   | Description                                                                 |
-|-------------------|-----------|-----------|-----------------------------------------------------------------------------|
-| `--model_name`   | `<string>`  | `normwear` | Supported models are [stats, chronos, clap, tfc, normwear]                                 |
-| `--model_weight_dir`   | `<string>`  | `""` | Path to the model checkpoint, only `normwear` need this parameter.                           |
-| `--group`   | `<int>`  | `0` | Run a group of downstream tasks. The group can be customized in `NormWear/downstream_main.py` |
+|--------------------------|-----------|-----------|-----------------------------------------------------------------------------|
+| `--model_name`           | `<string>`  | `normwear` | Supported models are [stats, chronos, clap, tfc, normwear]                                 |
+| `--model_weight_dir`     | `<string>`  | `""` | Path to the model checkpoint, only `normwear` need this parameter.                           |
+| `--group`                 | `<int>`  | `0` | Run a group of downstream tasks. The group can be customized in `NormWear/downstream_main.py` |
 | `--data_path`   | `<string>`  | `../data` | Root path for where the downstream data is placed. |
 | `--num_runs`   | `<int>`  | `1` | Number of repetition for running the evaluation of each task. |
 | `--prepare_embed`   | `<int>`  | `1` | Run the inference and save the embeddings before sending them to evaluation. Set to `1` to overwrite previous saved embedding if there are any. |
