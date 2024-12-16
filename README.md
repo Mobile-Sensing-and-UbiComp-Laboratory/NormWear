@@ -2,14 +2,14 @@
   
 # 🚀 NormWear: A Foundation Model for Multivariate Wearable Sensing of Physiological Signals.
 
-[![preprint](https://img.shields.io/static/v1?label=arXiv&message=TBD&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/TBD)
+[![preprint](https://img.shields.io/static/v1?label=arXiv&message=2412.09758&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/2412.09758)
 [![ckpt-release](https://img.shields.io/badge/Github_Release-Model_Checkpoint-black?logo=github&logoColor=white)](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha)
 [![downstream](https://img.shields.io/badge/Google_Drive-Downstream_Datasets-blue?logo=googledrive&logoColor=fff)](https://drive.google.com/file/d/1Mojf_iby8FnUydogwUE-b321fB1V6SGK/view?usp=sharing)
 
 </div>
 
 ## ✨ Introduction
-This is the official implementation of the paper [Toward Foundation Model for Multivariate Wearable Sensing of Physiological Signals](https://TBD).
+This is the official implementation of the paper [Toward Foundation Model for Multivariate Wearable Sensing of Physiological Signals](https://arxiv.org/abs/2412.09758).
 
 <p align="center">
   <img src="https://drive.google.com/uc?export=view&id=1kLJ9xc7c864mlPzjSo-HCiGRpzdjSMEO" width="100%">
@@ -230,13 +230,13 @@ torchrun --nproc_per_node=<number of device> main_finetune.py --world_size <numb
 If you find NormWear model useful for your research, please consider citing the associated [paper]([https://arxiv.org/abs/2403.07815](https://TBD)):
 
 ```
-@misc{tbd,
+@misc{luo2024foundationmodelmultivariatewearable,
       title={Toward Foundation Model for Multivariate Wearable Sensing of Physiological Signals}, 
-      author={Yunfei Luo, Yuliang Chen, Asif Salekin, Tauhidur Rahman},
+      author={Yunfei Luo and Yuliang Chen and Asif Salekin and Tauhidur Rahman},
       year={2024},
-      eprint={tbd},
+      eprint={2412.09758},
       archivePrefix={arXiv},
-      primaryClass={eess.SP},
-      url={https://arxiv.org/abs/tbd}, 
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2412.09758}, 
 }
 ```
