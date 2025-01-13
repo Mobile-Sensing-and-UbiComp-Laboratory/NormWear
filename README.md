@@ -240,3 +240,7 @@ If you find NormWear model useful for your research, please consider citing the 
       url={https://arxiv.org/abs/2412.09758}, 
 }
 ```
+
+## 📃 License
+This project is licensed under the [Apache License 2.0](LICENSE).
+
