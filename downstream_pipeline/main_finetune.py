@@ -232,7 +232,7 @@ def main(args):
     # Reload everytime
     print('Loading pre-trained checkpoint from',args.checkpoint)
     backbone = NormWear(img_size=args.img_size,patch_size=(9,5),nvar=args.num_channel,
-                                    is_pretrain=False,use_meanpooling=args.use_meanpooling,
+                                    is_pretrain=False,mean_fuse=args.use_meanpooling,
                                     mask_prob=0,)
     checkpoint = torch.load(args.checkpoint,map_location='cpu')
     checkpoint_model = checkpoint['model']
@@ -359,3 +359,19 @@ if __name__ == '__main__':
         Path(args.output_dir).mkdir(parents=True, exist_ok=True)
 
     main(args)
+
+
+"""
+Example run:
+
+single GPU:
+python main_finetune.py \
+      --ds_name PPG_CVD \
+      --checkpoint ../data/results/model_mae_checkpoint-140.pth
+
+
+multi GPU:
+torchrun --nproc_per_node=4 main_finetune.py \
+        --ds_name PPG_CVD \
+        --checkpoint ../data/results/model_mae_checkpoint-140.pth \
+"""
