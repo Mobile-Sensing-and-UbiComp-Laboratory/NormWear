@@ -5,7 +5,7 @@ import numpy as np
 import os
 import time
 from pathlib import Path
-from config import DATASET_CONFIG
+from downstream_pipeline.config import DATASET_CONFIG
 import torch
 import torch.nn as nn
 import torch.backends.cudnn as cudnn
@@ -21,9 +21,9 @@ from tqdm import tqdm
 from modules.head import RegressionHead, ClassificationHead
 from torch.utils.tensorboard import SummaryWriter
 
-import misc as misc
-from misc import NativeScalerWithGradNormCount as NativeScaler
-from engine_finetune import train_one_epoch,evaluate
+import pretrain_pipeline.misc as misc
+from pretrain_pipeline.misc import NativeScalerWithGradNormCount as NativeScaler
+from .engine_finetune import train_one_epoch,evaluate
 
 
 def parse_tuple(arg_str):
@@ -365,13 +365,15 @@ if __name__ == '__main__':
 Example run:
 
 single GPU:
-python main_finetune.py \
+python -m downstream_pipeline.main_finetune \
       --ds_name PPG_CVD \
-      --checkpoint ../data/results/model_mae_checkpoint-140.pth
+      --data_dir /data/wearable_downstream \
+      --checkpoint /data/results/submit_normwear_15470.pth # make sure this is the correct path
 
 
 multi GPU:
-torchrun --nproc_per_node=4 main_finetune.py \
-        --ds_name PPG_CVD \
-        --checkpoint ../data/results/model_mae_checkpoint-140.pth \
+torchrun --nproc_per_node=4 --module downstream_pipeline.main_finetune \
+    --ds_name PPG_CVD \
+    --data_dir /data/wearable_downstream \
+    --checkpoint /data/results/submit_normwear_15470.pth
 """

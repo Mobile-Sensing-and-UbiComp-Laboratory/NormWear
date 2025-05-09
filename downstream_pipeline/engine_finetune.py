@@ -14,10 +14,10 @@ import sys
 from typing import Iterable, Optional
 import torch
 import sklearn
-import analysis
+import downstream_pipeline.analysis as analysis
 from timm.data import Mixup
 import numpy as np
-import misc as misc
+import pretrain_pipeline.misc as misc
 import modules.lr_sched as lr_sched
 
 

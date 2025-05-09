@@ -123,7 +123,9 @@ class NormWear(nn.Module):
                  mask_t_prob=0.6, mask_f_prob=0.5,
                  mask_prob=0.8,mask_scheme='random', use_cwt=True,
                  attn_score=False,
-                 comb_freq=False):
+                 comb_freq=False,
+                 no_fusion=False,
+                 mean_fuse=False,):
         super().__init__()
         
         self.attn_score = attn_score
@@ -164,8 +166,8 @@ class NormWear(nn.Module):
                  fuse_frequency=fuse_freq,
                  curr_layer = i,
                  # fusion scheme
-                 no_fusion=False, # False
-                 mean_fuse=False, # False
+                 no_fusion=no_fusion, # False
+                 mean_fuse=mean_fuse, # False
                 )
             for i in range(depth)])
         
@@ -378,6 +380,30 @@ class NormWear(nn.Module):
             new_pos_embed = torch.cat((extra_tokens, pos_tokens), dim=1)
             return new_pos_embed
         return self.pos_embed
+    
+    def feature_extractor(self,x):
+        '''Input: bs, nvar, 3, L, F,
+           Output: bs, nvar, num_patches+1,E
+        '''
+        bs, nvar, ch, L, F = x.shape
+        x = torch.reshape(x,(bs*nvar,ch,L,F))
+
+        x = self.patch_embed(x)
+        x = x + self.pos_embed[:, 1:, :]
+
+        cls_token = self.cls_token + self.pos_embed[:, :1, :]
+        cls_tokens = cls_token.expand(x.shape[0], -1, -1)
+        x = torch.cat((cls_tokens, x), dim=1)
+
+        for blk in self.encoder_blocks:
+            x = blk(x)
+            
+        x = self.norm(x) # bs*nvar * p_patches * E
+
+        _,N,E = x.shape
+        z = torch.reshape(x,(bs,nvar,N,E))
+
+        return z
 
     def combine_freq_patch(self, x):
         # x: (N, N_var, L, E)
