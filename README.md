@@ -5,6 +5,7 @@
 [![preprint](https://img.shields.io/static/v1?label=arXiv&message=2412.09758&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/2412.09758)
 [![ckpt-release](https://img.shields.io/badge/Github_Release-Model_Checkpoint-black?logo=github&logoColor=white)](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha)
 [![downstream](https://img.shields.io/badge/Google_Drive-Downstream_Datasets-blue?logo=googledrive&logoColor=fff)](https://drive.google.com/file/d/1Mojf_iby8FnUydogwUE-b321fB1V6SGK/view?usp=sharing)
+[![pretrain](https://img.shields.io/badge/Google_Drive-Pretrain_Datasets-blue?logo=googledrive&logoColor=fff)](https://drive.google.com/file/d/1WBlyweezkYm16PR3UFrO85XrZCKjqWmP/view?usp=sharing)
 
 </div>
 
