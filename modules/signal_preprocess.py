@@ -65,3 +65,33 @@ def basic_preproc(
     ts_clear /= np.mean(np.abs(ts_clear))
     
     return ts_clear
+
+def preproc_all(all_tss, ss, ts=65, lc=0.1, hc=128, outlier_p=0.95): 
+    """
+    input:
+    all_tss: np.array, shape (C, L), C is the number of channels, L is the length of each channel
+    ss: int, source sampling rate, e.g., 65
+
+    output:
+    new_tss: np.array, shape (C, L'), 
+    C is the number of channels, L' is the length of each channel after preprocessing (resample)
+    """
+ 
+    C, L = all_tss.shape
+    new_tss = None
+
+    for j in range(C):
+        clean_tss = basic_preproc(
+                all_tss[j], 
+                sr=ss, 
+                tr=ts, 
+                l_pass=lc,
+                h_pass=hc,
+                outlier_p=outlier_p
+            )
+        if new_tss is None:
+            new_tss = np.zeros((C, len(clean_tss)))
+
+        new_tss[j] = clean_tss
+
+    return new_tss
