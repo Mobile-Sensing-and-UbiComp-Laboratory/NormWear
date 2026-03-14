@@ -9,6 +9,9 @@
 
 </div>
 
+> [!IMPORTANT]
+> 🚀 [News! Mar 2026] We are pleased to announce that our paper has been accepted by ACM Transactions on Computing for Healthcare (HEALTH) and is now In Press!
+
 ## ✨ Introduction
 This is the official implementation of the paper [Toward Foundation Model for Multivariate Wearable Sensing of Physiological Signals](https://arxiv.org/abs/2412.09758).
 
@@ -227,6 +230,9 @@ For multiple gpus, run:
 torchrun --nproc_per_node=<number of device> main_finetune.py --world_size <number of device> --ds_name <dataset_name> --checkpoint <weight_path>
 ```
 ## 📝 Citation
+
+> [!IMPORTANT]
+> The updated citation will be available shortly with journal information from ACM HEALTH.
 
 If you find NormWear model useful for your research, please consider citing the associated [paper]([https://arxiv.org/abs/2403.07815](https://TBD)):
 
