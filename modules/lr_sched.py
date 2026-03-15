@@ -1,4 +1,4 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Copyright (c) School of Computing, Information, and Data Science, University of California San Diego.
 # All rights reserved.
 
 # This source code is licensed under the license found in the

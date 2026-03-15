@@ -1,4 +1,4 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
+# Copyright (c) School of Computing, Information, and Data Science, University of California San Diego.
 # All rights reserved.
 
 # This source code is licensed under the license found in the
@@ -12,7 +12,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from timm.models.vision_transformer import Block
+from .layers import Block
 
 from .pos_embed import get_2d_sincos_pos_embed_flexible,get_1d_sincos_pos_embed_from_grid
 from .patch_embed import PatchEmbed_new,PatchEmbed_ts
