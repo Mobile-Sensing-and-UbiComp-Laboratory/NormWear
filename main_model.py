@@ -47,12 +47,12 @@ class NormWearModel(nn.Module):
 
         # load pretrained checkpoint
         if len(weight_path) > 0:
-            try:
-                stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))['model']
-                self.backbone.load_state_dict(stat_dict)
-                print("Model Checkpoint is successfully loaded!")
-            except:
-                print("Error occur during loading checkpoint, please check.")
+            # try:
+            stat_dict = torch.load(weight_path, map_location=torch.device('cpu'))
+            self.backbone.load_state_dict(stat_dict)
+            print("Model Checkpoint is successfully loaded!")
+            # except:
+            #     print("Error occur during loading checkpoint, please check.")
 
         self.sampling_rate = 65
     
