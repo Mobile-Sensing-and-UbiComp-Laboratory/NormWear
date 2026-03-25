@@ -232,7 +232,7 @@ torchrun --nproc_per_node=<number of device> main_finetune.py --world_size <numb
 ```
 ## 📝 Citation
 
-If you find NormWear model useful for your research, please consider citing the associated [paper](https://dl.acm.org/doi/10.1145/3803808):
+If you find NormWear model useful for your research, please consider citing the associated [paper](https://dl.acm.org/doi/10.1145/3803808).
 
 ```
 @article{10.1145/3803808,
