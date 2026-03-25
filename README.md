@@ -2,7 +2,7 @@
   
 # 🚀 NormWear: A Foundation Model for Multivariate Wearable Sensing of Physiological Signals.
 
-[![preprint](https://img.shields.io/static/v1?label=arXiv&message=2412.09758&color=B31B1B&logo=arXiv)](https://arxiv.org/abs/2412.09758)
+[![ACM Journal](https://img.shields.io/static/v1?label=ACM&message=10.1145/3803808&color=0B3D91&logo=acm)](https://dl.acm.org/doi/10.1145/3803808)
 [![huggingface](https://img.shields.io/badge/HuggingFace-Model-yellow?logo=huggingface&logoColor=black)](https://huggingface.co/mosaic-laboratory/normwear)
 [![ckpt-release](https://img.shields.io/badge/Github_Release-Model_Checkpoint-black?logo=github&logoColor=white)](https://github.com/Mobile-Sensing-and-UbiComp-Laboratory/NormWear/releases/tag/v1.0.0-alpha)
 [![downstream](https://img.shields.io/badge/Google_Drive-Downstream_Datasets-blue?logo=googledrive&logoColor=fff)](https://drive.google.com/file/d/1Mojf_iby8FnUydogwUE-b321fB1V6SGK/view?usp=sharing)
@@ -232,20 +232,21 @@ torchrun --nproc_per_node=<number of device> main_finetune.py --world_size <numb
 ```
 ## 📝 Citation
 
-> [!IMPORTANT]
-> The updated citation will be available shortly with journal information from ACM HEALTH.
-
-If you find NormWear model useful for your research, please consider citing the associated [paper]([https://arxiv.org/abs/2403.07815](https://TBD)):
+If you find NormWear model useful for your research, please consider citing the associated [paper]([https://dl.acm.org/doi/10.1145/3803808](https://dl.acm.org/doi/10.1145/3803808)):
 
 ```
-@misc{luo2024foundationmodelmultivariatewearable,
-      title={Toward Foundation Model for Multivariate Wearable Sensing of Physiological Signals}, 
-      author={Yunfei Luo and Yuliang Chen and Asif Salekin and Tauhidur Rahman},
-      year={2024},
-      eprint={2412.09758},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2412.09758}, 
+@article{10.1145/3803808,
+  author = {Luo, Yunfei and Chen, Yuliang and Salekin, Asif and Rahman, Tauhidur},
+  title = {Toward Foundation Model for Multivariate Wearable Sensing of Physiological Signals},
+  year = {2026},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/3803808},
+  doi = {10.1145/3803808},
+  note = {Just Accepted},
+  journal = {ACM Trans. Comput. Healthcare},
+  month = mar,
+  keywords = {Machine Learning, Deep Learning, Digital Health, Time Series Modeling, Signal Processing}
 }
 ```
 
