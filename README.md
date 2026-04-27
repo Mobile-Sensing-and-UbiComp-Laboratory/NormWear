@@ -17,8 +17,7 @@
 This is the official implementation of the paper [Toward Foundation Model for Multivariate Wearable Sensing of Physiological Signals](https://arxiv.org/abs/2412.09758).
 
 <p align="center">
-  <img src="https://drive.google.com/uc?export=view&id=1kLJ9xc7c864mlPzjSo-HCiGRpzdjSMEO" width="100%">
-  <br />
+  <img src="imgs/framework_overview.png" width="100%">
 </p>
 
 Time-series foundation models have the ability to run inference, mainly forecasting, on any type of time series data, thanks to the informative representations comprising waveform features. Wearable sensing data, on the other hand, contain more variability in both patterns and frequency bands of interest and generally emphasize more on the ability to infer healthcare-related outcomes. The main challenge of crafting a foundation model for wearable sensing physiological signals is to learn generalizable representations that support efficient adaptation across heterogeneous sensing configurations and applications. In this work, we propose NormWear, a step toward such a foundation model, aiming to extract generalized and informative wearable sensing representations. NormWear has been pretrained on a large set of physiological signals, including PPG, ECG, EEG, GSR, and IMU, from various public resources. For a holistic assessment, we perform downstream evaluation on 11 public wearable sensing datasets, spanning 18 applications in the areas of mental health, body state inference, vital sign estimations, and disease risk evaluations. We demonstrate that NormWear achieves a better performance improvement over competitive SoTA baselines with different modeling strategies. In addition, leveraging a novel representation-alignment-match-based method, we align physiological signals embeddings with text embeddings. This alignment enables our proposed foundation model to perform zero-shot inference, allowing it to generalize to previously unseen wearable signal-based health applications.
@@ -140,7 +139,7 @@ print("Inference probability shape:", pred_prob.shape) # # [2, num_options]
 > For the best performance, conduct prompt engineering on the query could be a good practice. 
 
 ## 🔥 Pre-training
-To run the evaluation on the downstream datasets, run the following command:
+To run the pretrain pipeline, run the following command:
 ```sh
 python3 -m NormWear.pretrain_main
 ```
