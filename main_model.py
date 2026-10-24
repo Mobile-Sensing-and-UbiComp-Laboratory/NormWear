@@ -62,15 +62,14 @@ class NormWearModel(nn.Module):
             sample_data = sample_data.numpy()
         sample_data = sample_data.astype(np.float32)
 
-        # resample
+        # resample any input rate to the model's 65 Hz
         if sampling_rate != self.sampling_rate:
-            if sampling_rate > 256:
-                resampler = T.Resample(sampling_rate, self.sampling_rate)
+            resampler = T.Resample(int(sampling_rate), self.sampling_rate)
 
-                bn, nvar, L = sample_data.shape
-                sample_data = resampler(sample_data.reshape(bn*nvar, L)) # [nvar*nvar, new_L]
-                _, new_L = sample_data.shape
-                sample_data = sample_data.reshape(bn, nvar, new_L) # [bn, nvar, new_L]
+            bn, nvar, L = sample_data.shape
+            sample_data = resampler(torch.from_numpy(sample_data).reshape(bn*nvar, L)) # [bn*nvar, new_L]
+            _, new_L = sample_data.shape
+            sample_data = sample_data.reshape(bn, nvar, new_L) # [bn, nvar, new_L]
 
         if torch.is_tensor(sample_data):
             sample_data = sample_data.numpy()

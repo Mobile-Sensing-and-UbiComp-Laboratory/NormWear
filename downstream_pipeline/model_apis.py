@@ -315,9 +315,8 @@ class NormWear_API(nn.Module):
 
         # resample
         if sampling_rate != self.sampling_rate:
-            if sampling_rate > 256:
-                resampler = T.Resample(sampling_rate, self.sampling_rate)
-                sample_data = resampler(sample_data) # [nvar, L]
+            resampler = T.Resample(int(sampling_rate), self.sampling_rate)
+            sample_data = resampler(sample_data) # [nvar, L]
 
         # calculate spectrogram
         spec = spec_cwt(sample_data.numpy()).float().unsqueeze(0).to(device) # [1, nvar, 3, L, n_mels]
@@ -404,9 +403,8 @@ class CrossVitAPI(nn.Module):
 
         # resample
         if sampling_rate != self.sampling_rate:
-            if sampling_rate > 256:
-                resampler = T.Resample(sampling_rate, self.sampling_rate)
-                sample_data = resampler(sample_data) # [nvar, L]
+            resampler = T.Resample(int(sampling_rate), self.sampling_rate)
+            sample_data = resampler(sample_data) # [nvar, L]
 
         # calculate spectrogram
         spec = spec_cwt(sample_data.numpy()).float().unsqueeze(0).to(device) # [1, nvar, 3, L, n_mels]
